@@ -12,9 +12,29 @@ const storeSchema = new mongoose.Schema({
   slug: String,
   description: {
     type: String,
-    trime: true,
+    trim: true,
   },
   tags: [String],
+  created: {
+    type: Date,
+    dafault: Date.now,
+  },
+  location: {
+    type: {
+      type: String,
+      default: 'Point',
+    },
+    coordinates: [
+      {
+        type: Number,
+        required: 'You must supply location coordinates',
+      },
+    ],
+    address: {
+      type: String,
+      required: 'You must supply an address',
+    },
+  },
 });
 
 storeSchema.pre('save', function slugGen(next) {
