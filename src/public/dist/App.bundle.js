@@ -74,7 +74,7 @@ __webpack_require__(1);
 
 var _bling = __webpack_require__(2);
 
-var _autocomplete = __webpack_require__(4);
+var _autocomplete = __webpack_require__(3);
 
 var _autocomplete2 = _interopRequireDefault(_autocomplete);
 
@@ -119,8 +119,7 @@ exports.$ = $;
 exports.$$ = $$;
 
 /***/ }),
-/* 3 */,
-/* 4 */
+/* 3 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
