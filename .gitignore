@@ -2,8 +2,9 @@ node_modules/
 .DS_Store
 *.log
 .idea
+.vscode/*
 haters/
 variables.env
 variables.env.now
 public/dist/
-.vscode/*
+package-lock.json
