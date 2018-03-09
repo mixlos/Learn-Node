@@ -38,11 +38,11 @@ const storeSchema = new mongoose.Schema({
   photo: String,
 });
 
-storeSchema.pre('save', function slugGen(next) {
+storeSchema.pre('save', function slugGenerator(next) {
   if (this.isModified('name')) {
     this.slug = slug(this.name);
   }
-  next();
+  return next();
 });
 
 module.exports = mongoose.model('Store', storeSchema);
