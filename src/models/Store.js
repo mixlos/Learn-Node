@@ -38,11 +38,24 @@ const storeSchema = new mongoose.Schema({
   photo: String,
 });
 
-storeSchema.pre('save', function slugGenerator(next) {
+storeSchema.pre('save', async function slugGenerator(next) {
   if (this.isModified('name')) {
-    this.slug = slug(this.name);
+    const thisSlug = slug(this.name);
+    const slugRegEx = new RegExp(`^(${thisSlug})((-[1-9]*$)?)$`, 'i');
+    const storesWithSlug = await this.constructor.find({ slug: slugRegEx });
+    this.slug = storesWithSlug.length
+      ? `${thisSlug}-${storesWithSlug.length}`
+      : thisSlug;
   }
   return next();
 });
+
+storeSchema.statics.getTagList = function tagListAggregator() {
+  return this.aggregate([
+    { $unwind: '$tags' },
+    { $group: { _id: '$tags', count: { $sum: 1 } } },
+    { $sort: { count: -1 } },
+  ]);
+};
 
 module.exports = mongoose.model('Store', storeSchema);

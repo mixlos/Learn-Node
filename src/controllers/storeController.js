@@ -7,7 +7,9 @@ const multerOptions = {
   storage: multer.memoryStorage(),
   fileFilter(req, file, next) {
     const isPhoto = file.mimetype.startsWith('image/');
-    return isPhoto ? next(null, true) : next({ message: 'That filetype is not allowed' }, false);
+    return isPhoto
+      ? next(null, true)
+      : next({ message: 'That filetype is not allowed' }, false);
   },
 };
 
@@ -15,7 +17,8 @@ const Store = mongoose.model('Store');
 
 exports.homePage = (req, res) => res.render('index');
 
-exports.addStore = (req, res) => res.render('editStore', { title: 'Add Store' });
+exports.addStore = (req, res) =>
+  res.render('editStore', { title: 'Add Store' });
 
 exports.upload = multer(multerOptions).single('photo');
 
@@ -33,7 +36,12 @@ exports.resize = async (req, res, next) => {
 exports.createStore = async (req, res) => {
   const storeInfo = new Store(req.body);
   const store = await storeInfo.save();
-  req.flash('success', `Successfully created <strong>${store.name}</strong>. Care to leave a review?`);
+  req.flash(
+    'success',
+    `Successfully created <strong>${
+      store.name
+    }</strong>. Care to leave a review?`
+  );
   res.redirect(`/store/${store.slug}`);
 };
 
@@ -55,7 +63,9 @@ exports.updateStore = async (req, res) => {
   }).exec();
   req.flash(
     'success',
-    `Successfully updated <strong>${store.name}</strong>. <a href="/stores/${store.slug}">View Store ▶️</a>`
+    `Successfully updated <strong>${store.name}</strong>. <a href="/stores/${
+      store.slug
+    }">View Store ▶️</a>`
   );
   // eslint-disable-next-line no-underscore-dangle
   res.redirect(`/stores/${store._id}/edit`);
@@ -63,8 +73,14 @@ exports.updateStore = async (req, res) => {
 
 exports.getStoreBySlug = async (req, res, next) => {
   const store = await Store.findOne({ slug: req.params.slug });
-  if (!store) {
-    return next();
-  }
-  res.render('store', { store, title: store.name });
+  return store ? res.render('store', { store, title: store.name }) : next();
+};
+
+exports.getStoresByTag = async (req, res) => {
+  const { tag } = req.params;
+  const tagQuery = tag || { $exists: true };
+  const tagsPromise = Store.getTagList();
+  const storesPromise = Store.find({ tags: tagQuery });
+  const [tags, stores] = await Promise.all([tagsPromise, storesPromise]);
+  res.render('tag', { tags, tag, stores });
 };
