@@ -9,6 +9,5 @@ mixin storeCard(store = {})
       h2.title
         a(href=`/store/${store.slug}`)= store.name
     .store__details
-      - const descArray = store.description.split(' ').slice(0, 25);
-      - const desc = descArray.length === 25 ? `${descArray.join(' ')}...` : descArray.join(' ')
-      p= desc
+      - const descAry = store.description.split(' ').slice(0, 25);
+      p= descAry.length === 25 ? `${descAry.join(' ')}...` : store.description

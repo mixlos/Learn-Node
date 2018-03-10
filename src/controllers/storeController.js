@@ -56,7 +56,8 @@ exports.updateStore = async (req, res) => {
   }).exec();
   req.flash(
     'success',
-    `Successfully updated <strong>${store.name}</strong>. <a href="/stores/${store.slug}">View Store.</a>`
+    `Successfully updated <strong>${store.name}</strong>. <a href="/stores/${store.slug}">View Store ▶️</a>`
   );
-  res.redirect(`/stores/${store._id}/edit`); // eslint-disable-line
+  // eslint-disable-next-line no-underscore-dangle
+  res.redirect(`/stores/${store._id}/edit`);
 };

@@ -17,7 +17,7 @@ const storeSchema = new mongoose.Schema({
   tags: [String],
   created: {
     type: Date,
-    dafault: Date.now,
+    default: Date.now,
   },
   location: {
     type: {
