@@ -73,7 +73,7 @@ exports.updateStore = async (req, res) => {
 
 exports.getStoreBySlug = async (req, res, next) => {
   const store = await Store.findOne({ slug: req.params.slug });
-  return store ? res.render('store', { store, title: store.name }) : next();
+  return store ? res.render('store', { title: store.name, store }) : next();
 };
 
 exports.getStoresByTag = async (req, res) => {
@@ -82,5 +82,5 @@ exports.getStoresByTag = async (req, res) => {
   const tagsPromise = Store.getTagList();
   const storesPromise = Store.find({ tags: tagQuery });
   const [tags, stores] = await Promise.all([tagsPromise, storesPromise]);
-  res.render('tag', { tags, tag, stores });
+  res.render('tag', { title: 'Tags', tags, tag, stores });
 };
